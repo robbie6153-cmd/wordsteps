@@ -8,11 +8,11 @@ let timerInterval = null;
 let usedWords = new Set();
 let gameEnded = false;
 
-const fallbackWords = [
-  "COLD", "CARD", "HAND", "FISH", "BOOK", "WORD", "FORK", "LAMP",
-  "MIND", "WALL", "MILK", "RING", "SAND", "FIRE", "WIND", "TREE",
-  "BELL", "SHIP", "ROAD", "STAR", "MOON", "PLAN", "GAME", "STEP"
-];
+function pickDailyStartWord() {
+  const usableWords = dictionary.length > 0 ? dictionary : fallbackWords;
+  const seed = getDailySeed();
+  return usableWords[seed % usableWords.length];
+}
 
 function getDictionaryArray() {
   if (typeof window.getDictionaryArray === "function") {
