@@ -1,8 +1,24 @@
 const GAME_TIME = 200;
+
 const fallbackWords = [
-  "COLD", "CARD", "HAND", "FISH", "BOOK", "WORD", "FORK", "LAMP",
-  "MIND", "WALL", "MILK", "RING", "SAND", "FIRE", "WIND", "TREE",
-  "BELL", "SHIP", "ROAD", "STAR", "MOON", "PLAN", "GAME", "STEP"
+  "COLD", "CORD", "WORD", "WORM", "FORM",
+  "CARD", "HARD", "HAND", "BAND", "BOND",
+  "FISH", "DISH", "DASH", "CASH", "BASH",
+  "BOOK", "LOOK", "LOCK", "LACK", "BACK",
+  "LAMP", "LIMP", "LIME", "TIME", "TILE",
+  "MIND", "WIND", "WINE", "LINE", "LONE",
+  "WALL", "WELL", "BELL", "BELT", "BENT",
+  "MILK", "SILK", "SICK", "SOCK", "LOCK",
+  "RING", "SING", "SANG", "SAND", "HAND",
+  "FIRE", "FIRM", "FORM", "FROM",
+  "TREE", "FREE", "FLEE", "FLEW",
+  "SHIP", "SHOP", "STOP", "STEP",
+  "ROAD", "ROAM", "FOAM", "FORM",
+  "STAR", "STIR", "STIR", "STIR",
+  "MOON", "MOOD", "GOOD", "WOOD",
+  "PLAN", "PLAY", "CLAY", "SLAY",
+  "GAME", "FAME", "FATE", "DATE",
+  "STEP", "STOP", "SHOP", "SHOT"
 ];
 
 let dictionary = [];
@@ -13,34 +29,25 @@ let timerInterval = null;
 let usedWords = new Set();
 let gameEnded = false;
 
-function pickDailyStartWord() {
-  const usableWords = dictionary.length > 0 ? dictionary : fallbackWords;
-  const seed = getDailySeed();
-  return usableWords[seed % usableWords.length];
-}
-
+// ✅ SIMPLE dictionary loader
 function getDictionaryArray() {
-  if (typeof window.getDictionaryArray === "function") {
-    return window.getDictionaryArray();
-  }
-
   if (Array.isArray(window.dictionaryWords)) {
     return window.dictionaryWords;
   }
-
   return [];
 }
 
+// ✅ Daily seed
 function getDailySeed() {
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
-  const day = today.getDate();
-
-  const utcDate = Date.UTC(year, month, day);
-  return Math.floor(utcDate / 86400000);
+  return Math.floor(Date.UTC(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  ) / 86400000);
 }
 
+// ✅ Load dictionary OR fallback
 function loadDictionary() {
   const rawDict = getDictionaryArray();
 
@@ -54,58 +61,41 @@ function loadDictionary() {
   }
 }
 
+// ✅ Pick daily word
 function pickDailyStartWord() {
-  if (!dictionary.length) {
-    return "WORD";
-  }
-
   const seed = getDailySeed();
   return dictionary[seed % dictionary.length];
 }
 
+// ✅ Update UI
 function updateDisplay() {
-  const currentWordEl = document.getElementById("currentWord");
-  const scoreEl = document.getElementById("score");
-  const timeEl = document.getElementById("time");
-
-  if (currentWordEl) currentWordEl.textContent = currentWord;
-  if (scoreEl) scoreEl.textContent = score;
-  if (timeEl) timeEl.textContent = timeLeft;
+  document.getElementById("currentWord").textContent = currentWord;
+  document.getElementById("score").textContent = score;
+  document.getElementById("time").textContent = timeLeft;
 }
 
+// ✅ Messages
 function showMessage(message, good = false) {
-  const messageEl = document.getElementById("message");
-  if (!messageEl) return;
-
-  messageEl.textContent = message;
-  messageEl.style.color = good ? "green" : "red";
+  const el = document.getElementById("message");
+  el.textContent = message;
+  el.style.color = good ? "green" : "red";
 }
 
-function countLetterDifferences(word1, word2) {
-  if (word1.length !== word2.length) return 99;
-
-  let differences = 0;
-
-  for (let i = 0; i < word1.length; i++) {
-    if (word1[i] !== word2[i]) {
-      differences++;
-    }
+// ✅ Check 1 letter difference
+function countLetterDifferences(a, b) {
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) diff++;
   }
-
-  return differences;
+  return diff;
 }
 
-function isValidDictionaryWord(word) {
-  return dictionary.includes(word);
-}
-
+// ✅ Submit word
 function submitWord() {
   if (gameEnded) return;
 
-  const inputEl = document.getElementById("wordInput");
-  if (!inputEl) return;
-
-  const newWord = inputEl.value.trim().toUpperCase();
+  const input = document.getElementById("wordInput");
+  const newWord = input.value.trim().toUpperCase();
 
   if (!/^[A-Z]{4}$/.test(newWord)) {
     showMessage("Enter a valid 4-letter word.");
@@ -113,69 +103,47 @@ function submitWord() {
   }
 
   if (newWord === currentWord) {
-    showMessage("You must change one letter.");
+    showMessage("Change one letter.");
     return;
   }
 
   if (usedWords.has(newWord)) {
-    showMessage("You already used that word.");
-    return;
-  }
-
-  if (!isValidDictionaryWord(newWord)) {
-    showMessage("That word is not in the dictionary.");
+    showMessage("Already used.");
     return;
   }
 
   if (countLetterDifferences(currentWord, newWord) !== 1) {
-    showMessage("You can only change one letter at a time.");
+    showMessage("Only one letter can change.");
     return;
   }
 
   currentWord = newWord;
   usedWords.add(newWord);
   score++;
+
   updateDisplay();
-  showMessage("Good word!", true);
+  showMessage("Good!", true);
 
-  inputEl.value = "";
-  inputEl.focus();
+  input.value = "";
 }
 
-function endGame() {
-  gameEnded = true;
-  clearInterval(timerInterval);
-  timerInterval = null;
-
-  const inputEl = document.getElementById("wordInput");
-  const submitBtn = document.getElementById("submitBtn");
-  const finalScoreEl = document.getElementById("finalScore");
-
-  if (inputEl) inputEl.disabled = true;
-  if (submitBtn) submitBtn.disabled = true;
-
-  if (finalScoreEl) {
-    finalScoreEl.textContent = `Time's up! You scored ${score} point${score === 1 ? "" : "s"}.`;
-  }
-
-  showMessage("Game over.");
-}
-
+// ✅ Timer
 function startTimer() {
-  clearInterval(timerInterval);
-
   timerInterval = setInterval(() => {
     timeLeft--;
     updateDisplay();
 
     if (timeLeft <= 0) {
-      timeLeft = 0;
-      updateDisplay();
-      endGame();
+      clearInterval(timerInterval);
+      gameEnded = true;
+
+      document.getElementById("finalScore").textContent =
+        `Time's up! Score: ${score}`;
     }
   }, 1000);
 }
 
+// ✅ Start game
 function startGame2() {
   loadDictionary();
 
@@ -185,45 +153,21 @@ function startGame2() {
   usedWords = new Set([currentWord]);
   gameEnded = false;
 
-  const inputEl = document.getElementById("wordInput");
-  const submitBtn = document.getElementById("submitBtn");
-  const finalScoreEl = document.getElementById("finalScore");
-
-  if (inputEl) {
-    inputEl.disabled = false;
-    inputEl.value = "";
-  }
-
-  if (submitBtn) {
-    submitBtn.disabled = false;
-  }
-
-  if (finalScoreEl) {
-    finalScoreEl.textContent = "";
-  }
-
   updateDisplay();
-  showMessage("Change one letter to make a new 4-letter word.", true);
-  startTimer();
+  showMessage("Change one letter.");
 
-  if (inputEl) inputEl.focus();
+  startTimer();
 }
 
+// ✅ Events
 document.addEventListener("DOMContentLoaded", () => {
-  const submitBtn = document.getElementById("submitBtn");
-  const inputEl = document.getElementById("wordInput");
+  document.getElementById("submitBtn")
+    .addEventListener("click", submitWord);
 
-  if (submitBtn) {
-    submitBtn.addEventListener("click", submitWord);
-  }
-
-  if (inputEl) {
-    inputEl.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        submitWord();
-      }
+  document.getElementById("wordInput")
+    .addEventListener("keydown", (e) => {
+      if (e.key === "Enter") submitWord();
     });
-  }
 
   startGame2();
 });
