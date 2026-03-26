@@ -1,4 +1,9 @@
 const GAME_TIME = 200;
+const fallbackWords = [
+  "COLD", "CARD", "HAND", "FISH", "BOOK", "WORD", "FORK", "LAMP",
+  "MIND", "WALL", "MILK", "RING", "SAND", "FIRE", "WIND", "TREE",
+  "BELL", "SHIP", "ROAD", "STAR", "MOON", "PLAN", "GAME", "STEP"
+];
 
 let dictionary = [];
 let currentWord = "";
