@@ -33,6 +33,7 @@ h1 {
 
 /* CURRENT WORD TILE */
 #currentWord {
+  color: red
   display: inline-block;
   background: #5a5a5a;
   padding: 12px 20px;
