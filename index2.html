@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Steps</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style2.css">
+</head>
+
+<body>
+
+  <div id="game">
+    <h1>Word Steps</h1>
+
+    <p>Start word: <span id="currentWord"></span></p>
+    <p>Time: <span id="time">200</span></p>
+    <p>Score: <span id="score">0</span></p>
+
+    <input type="text" id="wordInput" maxlength="4" placeholder="Enter 4-letter word">
+    <button id="submitBtn">Submit</button>
+
+    <p id="message"></p>
+    <p id="finalScore"></p>
+  </div>
+
+  <!-- JS (ORDER MATTERS) -->
+  <script src="dictionary.js"></script>
+  <script src="game2.js"></script>
+
+</body>
+</html>
