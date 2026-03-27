@@ -133,8 +133,7 @@ function startTimer() {
 }
 
 function startGame2() {
-  loadDictionary();
-  currentWord = pickDailyStartWord();
+  currentWord = "TEST";
   score = 0;
   timeLeft = GAME_TIME;
   usedWords = new Set([currentWord]);
@@ -142,7 +141,6 @@ function startGame2() {
 
   updateDisplay();
   showMessage("Change one letter.");
-
   startTimer();
 }
 
