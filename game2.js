@@ -1,25 +1,5 @@
 const GAME_TIME = 200;
 
-const fallbackWords = [
-  "COLD", "CORD", "WORD", "WORM", "FORM",
-  "CARD", "HARD", "HAND", "BAND", "BOND",
-  "FISH", "DISH", "DASH", "CASH", "BASH",
-  "BOOK", "LOOK", "LOCK", "LACK", "BACK",
-  "LAMP", "LIMP", "LIME", "TIME", "TILE",
-  "MIND", "WIND", "WINE", "LINE", "LONE",
-  "WALL", "WELL", "BELL", "BELT", "BENT",
-  "MILK", "SILK", "SICK", "SOCK", "LOCK",
-  "RING", "SING", "SANG", "SAND", "HAND",
-  "FIRE", "FIRM", "FORM", "FROM",
-  "TREE", "FREE", "FLEE", "FLEW",
-  "SHIP", "SHOP", "STOP", "STEP",
-  "ROAD", "ROAM", "FOAM", "FORM",
-  "MOON", "MOOD", "GOOD", "WOOD",
-  "PLAN", "PLAY", "CLAY", "SLAY",
-  "GAME", "FAME", "FATE", "DATE"
-];
-
-let dictionary = [];
 let currentWord = "";
 let score = 0;
 let timeLeft = GAME_TIME;
@@ -27,12 +7,11 @@ let timerInterval = null;
 let usedWords = new Set();
 let gameEnded = false;
 
-function getDictionaryArray() {
-  if (Array.isArray(window.dictionaryWords)) {
-    return window.dictionaryWords;
-  }
-  return [];
-}
+const fallbackWords = [
+  "COLD", "CARD", "HAND", "FISH", "BOOK", "WORD", "FORK", "LAMP",
+  "MIND", "WALL", "MILK", "RING", "SAND", "FIRE", "WIND", "TREE",
+  "BELL", "SHIP", "ROAD", "STAR", "MOON", "PLAN", "GAME", "STEP"
+];
 
 function getDailySeed() {
   const today = new Date();
@@ -43,22 +22,9 @@ function getDailySeed() {
   ) / 86400000);
 }
 
-function loadDictionary() {
-  const rawDict = getDictionaryArray();
-
-  dictionary = rawDict
-    .filter(word => typeof word === "string")
-    .map(word => word.trim().toUpperCase())
-    .filter(word => /^[A-Z]{4}$/.test(word));
-
-  if (dictionary.length === 0) {
-    dictionary = [...fallbackWords];
-  }
-}
-
 function pickDailyStartWord() {
   const seed = getDailySeed();
-  return dictionary[seed % dictionary.length];
+  return fallbackWords[seed % fallbackWords.length];
 }
 
 function updateDisplay() {
@@ -74,6 +40,8 @@ function showMessage(message, good = false) {
 }
 
 function countLetterDifferences(a, b) {
+  if (a.length !== b.length) return 99;
+
   let diff = 0;
   for (let i = 0; i < a.length; i++) {
     if (a[i] !== b[i]) diff++;
@@ -88,7 +56,7 @@ function submitWord() {
   const newWord = input.value.trim().toUpperCase();
 
   if (!/^[A-Z]{4}$/.test(newWord)) {
-    showMessage("Enter a valid 4-letter word.");
+    showMessage("Enter a 4-letter word.");
     return;
   }
 
@@ -113,7 +81,6 @@ function submitWord() {
 
   updateDisplay();
   showMessage("Good!", true);
-
   input.value = "";
 }
 
@@ -127,17 +94,22 @@ function startTimer() {
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
       gameEnded = true;
+      timeLeft = 0;
+      updateDisplay();
       document.getElementById("finalScore").textContent = `Time's up! Score: ${score}`;
     }
   }, 1000);
 }
 
 function startGame2() {
-  currentWord = "TEST";
+  currentWord = pickDailyStartWord();
   score = 0;
   timeLeft = GAME_TIME;
   usedWords = new Set([currentWord]);
   gameEnded = false;
+
+  document.getElementById("finalScore").textContent = "";
+  document.getElementById("wordInput").value = "";
 
   updateDisplay();
   showMessage("Change one letter.");
@@ -145,18 +117,6 @@ function startGame2() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const playBtn = document.getElementById("playNowBtn");
-  const homeScreen = document.getElementById("home-screen");
-  const gameScreen = document.getElementById("game");
-
-  if (playBtn) {
-    playBtn.addEventListener("click", () => {
-      homeScreen.style.display = "none";
-      gameScreen.style.display = "block";
-      startGame2();
-    });
-  }
-
   const submitBtn = document.getElementById("submitBtn");
   const wordInput = document.getElementById("wordInput");
 

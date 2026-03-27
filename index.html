@@ -15,35 +15,30 @@
     </div>
   </div>
 
-  
   <div id="game" style="display:none;">
-  <h1>Word Steps</h1>
+    <h1>Word Steps</h1>
 
-  <p>Start word:</p>
-  <div id="currentWord">TEST</div>
+    <p>Start word:</p>
+    <div id="currentWord"></div>
 
-  <p>Time: <span id="time">200</span></p>
-  <p>Score: <span id="score">0</span></p>
+    <p>Time: <span id="time">200</span></p>
+    <p>Score: <span id="score">0</span></p>
 
-  <input type="text" id="wordInput" maxlength="4" placeholder="Enter 4-letter word">
-  <button id="submitBtn">Submit</button>
+    <input type="text" id="wordInput" maxlength="4" placeholder="Enter 4-letter word">
+    <button id="submitBtn">Submit</button>
 
-  <p id="message"></p>
-  <p id="finalScore"></p>
-</div>
-  
-<script>
-  function startWordSteps() {
-    document.getElementById("home-screen").style.display = "none";
-    document.getElementById("game").style.display = "block";
+    <p id="message"></p>
+    <p id="finalScore"></p>
+  </div>
 
-    if (typeof startGame2 === "function") {
+  <script>
+    function startWordSteps() {
+      document.getElementById("home-screen").style.display = "none";
+      document.getElementById("game").style.display = "block";
       startGame2();
     }
-  }
-</script>
+  </script>
 
-  <script src="dictionary.js"></script>
   <script src="game2.js"></script>
 </body>
 </html>
