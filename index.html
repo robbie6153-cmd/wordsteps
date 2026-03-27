@@ -11,7 +11,7 @@
   <div id="home-screen">
     <div class="home-container">
       <img src="homepage.jpg" alt="Word Steps Home">
-      <button id="playNowBtn" class="play-now-btn">Play Now</button>
+      <button id="playNowBtn" class="play-now-btn" onclick="startWordSteps()">Play Now</button>
     </div>
   </div>
 
@@ -28,6 +28,17 @@
     <p id="message"></p>
     <p id="finalScore"></p>
   </div>
+  
+<script>
+  function startWordSteps() {
+    document.getElementById("home-screen").style.display = "none";
+    document.getElementById("game").style.display = "block";
+
+    if (typeof startGame2 === "function") {
+      startGame2();
+    }
+  }
+</script>
 
   <script src="dictionary.js"></script>
   <script src="game2.js"></script>
