@@ -56,19 +56,19 @@ function submitWord() {
   const newWord = input.value.trim().toUpperCase();
 
   if (!/^[A-Z]{4}$/.test(newWord)) {
-  showMessage("Enter a 4-letter word.");
-  return;
-}
+    showMessage("Enter a 4-letter word.");
+    return;
+  }
 
-if (dictionary.length === 0) {
-  showMessage("Dictionary still loading. Try again.");
-  return;
-}
+  if (dictionary.length === 0) {
+    showMessage("Dictionary still loading. Try again.");
+    return;
+  }
 
-if (!dictionary.includes(newWord)) {
-  showMessage("Not in dictionary.");
-  return;
-}
+  if (!dictionary.includes(newWord)) {
+    showMessage("Not in dictionary.");
+    return;
+  }
 
   if (newWord === currentWord) {
     showMessage("Change one letter.");
@@ -87,17 +87,13 @@ if (!dictionary.includes(newWord)) {
 
   currentWord = newWord;
   usedWords.add(newWord);
-}
-  
-
-  currentWord = newWord;
-  usedWords.add(newWord);
   score++;
 
   updateDisplay();
   showMessage("Good!", true);
   input.value = "";
 }
+  
 
 function startTimer() {
   clearInterval(timerInterval);
