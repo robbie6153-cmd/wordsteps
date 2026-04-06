@@ -270,5 +270,4 @@ document.addEventListener("DOMContentLoaded", () => {
     playAgainBtn.addEventListener("click", startGame2);
   }
 
-  startGame2();
 });
