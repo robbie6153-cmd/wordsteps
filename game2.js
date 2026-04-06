@@ -1,17 +1,23 @@
-const GAME_TIME = 200;
+const ROUNDS = [
+  { round: 1, wordLength: 4, time: 60, points: 1 },
+  { round: 2, wordLength: 5, time: 60, points: 2 },
+  { round: 3, wordLength: 6, time: 60, points: 4 }
+];
 
+const roundWords = {
+  4: ["COLD", "CARD", "HAND", "FISH", "BOOK", "WORD", "FORK", "LAMP"],
+  5: ["STONE", "PLANE", "SMILE", "CRANE", "BRICK", "SHINE", "GRASS", "TRAIN"],
+  6: ["PLANET", "STREAM", "BRIGHT", "MARKET", "SILVER", "POCKET", "GARDEN", "WINTER"]
+};
+
+let currentRoundIndex = 0;
 let currentWord = "";
 let score = 0;
-let timeLeft = GAME_TIME;
+let timeLeft = 0;
 let timerInterval = null;
 let usedWords = new Set();
 let gameEnded = false;
-
-const fallbackWords = [
-  "COLD", "CARD", "HAND", "FISH", "BOOK", "WORD", "FORK", "LAMP",
-  "MIND", "WALL", "MILK", "RING", "SAND", "FIRE", "WIND", "TREE",
-  "BELL", "SHIP", "ROAD", "STAR", "MOON", "PLAN", "GAME", "STEP"
-];
+let roundTransitioning = false;
 
 function getDailySeed() {
   const today = new Date();
@@ -22,21 +28,27 @@ function getDailySeed() {
   ) / 86400000);
 }
 
-function pickDailyStartWord() {
-  const seed = getDailySeed();
-  return fallbackWords[seed % fallbackWords.length];
+function pickDailyStartWord(wordLength) {
+  const words = roundWords[wordLength];
+  const seed = getDailySeed() + currentRoundIndex;
+  return words[seed % words.length];
 }
 
 function updateDisplay() {
   document.getElementById("currentWord").textContent = currentWord;
   document.getElementById("score").textContent = score;
   document.getElementById("time").textContent = timeLeft;
+
+  const roundEl = document.getElementById("round");
+  if (roundEl) {
+    roundEl.textContent = currentRoundIndex + 1;
+  }
 }
 
 function showMessage(message, good = false) {
   const el = document.getElementById("message");
   el.textContent = message;
-  el.style.color = good ? "green" : "red";
+  el.style.color = good ? "limegreen" : "red";
 }
 
 function countLetterDifferences(a, b) {
@@ -49,18 +61,37 @@ function countLetterDifferences(a, b) {
   return diff;
 }
 
+function getCurrentRoundConfig() {
+  return ROUNDS[currentRoundIndex];
+}
+
+function getDictionaryForLength(length) {
+  if (!Array.isArray(dictionary)) return [];
+  return dictionary.filter(word => word.length === length);
+}
+
+function getValidMoves(word) {
+  const dict = getDictionaryForLength(word.length);
+  return dict.filter(candidate =>
+    candidate !== word &&
+    !usedWords.has(candidate) &&
+    countLetterDifferences(word, candidate) === 1
+  );
+}
+
 function submitWord() {
-  if (gameEnded) return;
+  if (gameEnded || roundTransitioning) return;
 
   const input = document.getElementById("wordInput");
   const newWord = input.value.trim().toUpperCase();
+  const config = getCurrentRoundConfig();
 
-  if (!/^[A-Z]{4}$/.test(newWord)) {
-    showMessage("Enter a 4-letter word.");
+  if (!new RegExp(`^[A-Z]{${config.wordLength}}$`).test(newWord)) {
+    showMessage(`Enter a ${config.wordLength}-letter word.`);
     return;
   }
 
-  if (dictionary.length === 0) {
+  if (!Array.isArray(dictionary) || dictionary.length === 0) {
     showMessage("Dictionary still loading. Try again.");
     return;
   }
@@ -87,13 +118,17 @@ function submitWord() {
 
   currentWord = newWord;
   usedWords.add(newWord);
-  score++;
+  score += config.points;
 
   updateDisplay();
-  showMessage("Good!", true);
+  showMessage(`Good! +${config.points}`, true);
   input.value = "";
+
+  const remainingMoves = getValidMoves(currentWord);
+  if (remainingMoves.length === 0) {
+    endGame("No more possible words.");
+  }
 }
-  
 
 function startTimer() {
   clearInterval(timerInterval);
@@ -104,32 +139,122 @@ function startTimer() {
 
     if (timeLeft <= 0) {
       clearInterval(timerInterval);
-      gameEnded = true;
       timeLeft = 0;
       updateDisplay();
-      document.getElementById("finalScore").textContent = `Time's up! Score: ${score}`;
+      moveToNextRoundOrEnd();
     }
   }, 1000);
 }
 
-function startGame2() {
-  currentWord = pickDailyStartWord();
-  score = 0;
-  timeLeft = GAME_TIME;
-  usedWords = new Set([currentWord]);
-  gameEnded = false;
+function showRoundPopup(message, callback) {
+  roundTransitioning = true;
 
-  document.getElementById("finalScore").textContent = "";
+  const popup = document.getElementById("roundPopup");
+  const text = document.getElementById("roundPopupText");
+  const countdown = document.getElementById("roundCountdown");
+
+  if (!popup || !text || !countdown) {
+    callback();
+    roundTransitioning = false;
+    return;
+  }
+
+  popup.style.display = "flex";
+  text.textContent = message;
+
+  let count = 3;
+  countdown.textContent = count;
+
+  const countdownInterval = setInterval(() => {
+    count--;
+    if (count > 0) {
+      countdown.textContent = count;
+    } else {
+      clearInterval(countdownInterval);
+      popup.style.display = "none";
+      roundTransitioning = false;
+      callback();
+    }
+  }, 1000);
+}
+
+function startRound(index) {
+  currentRoundIndex = index;
+  const config = getCurrentRoundConfig();
+
+  currentWord = pickDailyStartWord(config.wordLength);
+  usedWords = new Set([currentWord]);
+  timeLeft = config.time;
+
   document.getElementById("wordInput").value = "";
 
   updateDisplay();
-  showMessage("Change one letter.");
+  showMessage(
+    `Round ${config.round}: change one letter at a time. ${config.points} point${config.points > 1 ? "s" : ""} per word.`,
+    true
+  );
+
+  if (getValidMoves(currentWord).length === 0) {
+    endGame("No possible moves from the starting word.");
+    return;
+  }
+
   startTimer();
+}
+
+function moveToNextRoundOrEnd() {
+  if (currentRoundIndex < ROUNDS.length - 1) {
+    const nextConfig = ROUNDS[currentRoundIndex + 1];
+
+    showRoundPopup(
+      `Round ${nextConfig.round} - words are now worth ${nextConfig.points} point${nextConfig.points > 1 ? "s" : ""}`,
+      () => {
+        startRound(currentRoundIndex + 1);
+      }
+    );
+  } else {
+    endGame(`Game over! You scored ${score} points.`);
+  }
+}
+
+function endGame(message) {
+  clearInterval(timerInterval);
+  gameEnded = true;
+
+  const finalScoreEl = document.getElementById("finalScore");
+  if (finalScoreEl) {
+    finalScoreEl.textContent = message;
+  }
+
+  const endScreen = document.getElementById("endScreen");
+  if (endScreen) {
+    endScreen.style.display = "flex";
+  }
+
+  showMessage("Game ended.");
+}
+
+function startGame2() {
+  clearInterval(timerInterval);
+
+  score = 0;
+  gameEnded = false;
+  roundTransitioning = false;
+
+  const endScreen = document.getElementById("endScreen");
+  if (endScreen) {
+    endScreen.style.display = "none";
+  }
+
+  document.getElementById("finalScore").textContent = "";
+
+  startRound(0);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const submitBtn = document.getElementById("submitBtn");
   const wordInput = document.getElementById("wordInput");
+  const playAgainBtn = document.getElementById("playAgainBtn");
 
   if (submitBtn) {
     submitBtn.addEventListener("click", submitWord);
@@ -140,4 +265,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === "Enter") submitWord();
     });
   }
+
+  if (playAgainBtn) {
+    playAgainBtn.addEventListener("click", startGame2);
+  }
+
+  startGame2();
 });

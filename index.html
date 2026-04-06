@@ -8,6 +8,7 @@
 </head>
 <body>
 
+  <!-- HOME SCREEN -->
   <div id="home-screen">
     <div class="home-container">
       <img src="homepage.jpg" alt="Word Steps Home">
@@ -15,20 +16,40 @@
     </div>
   </div>
 
+  <!-- GAME SCREEN -->
   <div id="game" style="display:none;">
     <h1>Word Steps</h1>
+
+    <p>Round: <span id="round">1</span></p>
 
     <p>Start word:</p>
     <div id="currentWord"></div>
 
-    <p>Time: <span id="time">200</span></p>
+    <p>Time: <span id="time">60</span></p>
     <p>Score: <span id="score">0</span></p>
 
-    <input type="text" id="wordInput" maxlength="4" placeholder="Enter 4-letter word">
+    <input type="text" id="wordInput" placeholder="Enter word">
     <button id="submitBtn">Submit</button>
 
     <p id="message"></p>
-    <p id="finalScore"></p>
+  </div>
+
+  <!-- ROUND POPUP -->
+  <div id="roundPopup" style="display:none;">
+    <div class="popup-box">
+      <h2 id="roundPopupText">Round 2</h2>
+      <div id="roundCountdown">3</div>
+    </div>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="endScreen" style="display:none;">
+    <div class="end-box">
+      <p id="finalScore">Game over! You scored 0 points.</p>
+      <button id="playAgainBtn">Play Again</button>
+      <button id="submitScoreBtn">Submit Score</button>
+      <button onclick="window.location.href='index.html'">Home</button>
+    </div>
   </div>
 
   <script>
@@ -40,6 +61,6 @@
   </script>
 
   <script src="dictionary.js"></script>
-<script src="game2.js"></script>
+  <script src="game2.js"></script>
 </body>
 </html>
