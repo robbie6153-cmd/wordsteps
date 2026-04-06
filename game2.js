@@ -45,10 +45,13 @@ function updateDisplay() {
   }
 }
 
-function showMessage(message, good = false) {
+function showMessage(message, type = "normal") {
   const el = document.getElementById("message");
   el.textContent = message;
-  el.style.color = good ? "limegreen" : "red";
+
+  if (type === "good") el.style.color = "limegreen";
+  else if (type === "error") el.style.color = "red";
+  else el.style.color = "black";
 }
 
 function countLetterDifferences(a, b) {
@@ -191,7 +194,6 @@ function startRound(index) {
   updateDisplay();
   showMessage(
     `Round ${config.round}: change one letter at a time. ${config.points} point${config.points > 1 ? "s" : ""} per word.`,
-    true
   );
 
   if (getValidMoves(currentWord).length === 0) {
