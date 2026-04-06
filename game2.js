@@ -184,6 +184,8 @@ function showRoundPopup(message, callback) {
 function startRound(index) {
   currentRoundIndex = index;
   const config = getCurrentRoundConfig();
+  document.body.classList.remove("round-1", "round-2", "round-3");
+document.body.classList.add(`round-${config.round}`);
 
   currentWord = pickDailyStartWord(config.wordLength);
   usedWords = new Set([currentWord]);
