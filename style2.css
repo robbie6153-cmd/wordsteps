@@ -310,3 +310,60 @@ h1 {
     padding: 12px;
   }
 }
+.info-section {
+  width: 100%;
+  background: #f4f4f4;
+  padding: 40px 20px 60px;
+  box-sizing: border-box;
+}
+
+.info-box {
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  color: #111;
+  line-height: 1.7;
+}
+
+.info-box h2 {
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.info-box h3 {
+  font-size: 1.4rem;
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+.info-box p {
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 768px) {
+  .info-section {
+    padding: 30px 16px 50px;
+  }
+
+  .info-box {
+    padding: 22px 18px;
+  }
+
+  .info-box h2 {
+    font-size: 1.6rem;
+  }
+
+  .info-box h3 {
+    font-size: 1.2rem;
+  }
+
+  .info-box p {
+    font-size: 1rem;
+  }
+}
