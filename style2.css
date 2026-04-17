@@ -353,3 +353,59 @@ h1 {
     padding: 12px;
   }
 }
+/* HOTSPOT CONTAINER */
+.top-hotspots {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px; /* height of your top bar */
+  z-index: 20;
+}
+
+/* BASE HOTSPOT STYLE */
+.hotspot {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: rgba(255, 0, 150, 0.35); /* TEMP PINK */
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* INDIVIDUAL BUTTON POSITIONS */
+
+/* adjust these widths/positions to match icons */
+.hotspot.home {
+  left: 0%;
+  width: 12%;
+}
+
+.hotspot.leaderboard {
+  left: 12%;
+  width: 12%;
+}
+
+.hotspot.privacy {
+  left: 24%;
+  width: 16%;
+}
+
+.hotspot.terms {
+  left: 40%;
+  width: 18%;
+}
+
+.hotspot.about {
+  left: 58%;
+  width: 14%;
+}
+
+.hotspot.settings {
+  left: 72%;
+  width: 12%;
+}
+
+.hotspot.profile {
+  left: 84%;
+  width: 16%;
+}
