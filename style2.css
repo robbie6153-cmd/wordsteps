@@ -426,8 +426,18 @@ h1 {
 
 /* CONTACT */
 .contact-hotspot {
-  top: 96%;
-  left: 75%;
-  width: 22%;
+  top: 95%;
+  left: 73%;
+  width: 24%;
   height: 7%;
+}
+.contact-label {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(0,0,0,0.7);
+  pointer-events: none;
 }
