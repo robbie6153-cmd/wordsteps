@@ -451,3 +451,24 @@ border: none;
   text-shadow: 0 0 6px rgba(0,0,0,0.7);
   pointer-events: none;
 }
+.contact-inner {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 0 0 6px rgba(0,0,0,0.7);
+  pointer-events: none;
+}
+
+.contact-icon {
+  font-size: 16px;
+}
+
+.contact-text {
+  font-size: 14px;
+}
