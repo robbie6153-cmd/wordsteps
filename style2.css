@@ -70,17 +70,16 @@ body.round-3 #bgTint {
 .play-now-btn {
   position: absolute;
   left: 50%;
-  bottom: 14%;
+  bottom: 18%; /* 🔼 moved UP (increase this if needed) */
   transform: translateX(-50%);
+
   width: 300px;
   height: 80px;
-  line-height: 80px;
-  text-align: center;
-  font-size: 28px;
-  font-weight: bold;
-  background-color: #2ecc71;
-  color: white;
-  border-radius: 10px;
+
+  background: transparent; /* 👈 invisible */
+  color: transparent;      /* 👈 hides text */
+  border: none;
+
   cursor: pointer;
   z-index: 10;
   pointer-events: auto;
