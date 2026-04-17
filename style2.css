@@ -367,3 +367,28 @@ h1 {
     font-size: 1rem;
   }
 }
+#home-screen,
+.info-section {
+  display: block;
+  width: 100%;
+}
+
+.info-section {
+  clear: both;
+}
+
+.home-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.home-container img {
+  width: 100%;
+  display: block;
+}
+
+.info-box {
+  max-width: 800px;
+  margin: 30px auto 0;
+}
