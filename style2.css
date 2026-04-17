@@ -363,13 +363,15 @@ h1 {
   height: 100%;
   z-index: 20;
 }
-
+/* BASE HOTSPOTS */
 .hotspot,
 .contact-hotspot {
   position: absolute;
   background: rgba(255, 0, 150, 0.35);
   border: 1px solid rgba(255,255,255,0.3);
   display: block;
+  z-index: 50;
+  pointer-events: auto;
 }
 
 /* TOP ROW */
@@ -422,9 +424,9 @@ h1 {
   height: 7%;
 }
 
-/* BOTTOM RIGHT CONTACT */
+/* CONTACT */
 .contact-hotspot {
-  top: 92%;
+  top: 88%;
   left: 75%;
   width: 22%;
   height: 7%;
