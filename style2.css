@@ -359,7 +359,7 @@ h1 {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100px; /* height of your top bar */
+  height: 70px; /* height of your top bar */
   z-index: 20;
 }
 
@@ -377,35 +377,35 @@ h1 {
 /* adjust these widths/positions to match icons */
 .hotspot.home {
   left: 0%;
-  width: 12%;
+  width: 10%;
 }
 
 .hotspot.leaderboard {
-  left: 12%;
-  width: 12%;
+  left: 10%;
+  width: 10%;
 }
 
 .hotspot.privacy {
-  left: 24%;
-  width: 16%;
+  left: 20%;
+  width: 18%;
 }
 
 .hotspot.terms {
-  left: 40%;
+  left: 38%;
   width: 18%;
 }
 
 .hotspot.about {
-  left: 58%;
+  left: 56%;
   width: 14%;
 }
 
 .hotspot.settings {
-  left: 72%;
+  left: 70%;
   width: 12%;
 }
 
 .hotspot.profile {
-  left: 84%;
-  width: 16%;
+  left: 82%;
+  width: 18%;
 }
