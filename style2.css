@@ -387,12 +387,12 @@ h1 {
 
 .hotspot.privacy {
   left: 21%;
-  width: 17%;
+  width: 18%;
 }
 
 .hotspot.terms {
-  left: 38%;
-  width: 19%;
+  left: 39%;
+  width: 18%;
 }
 
 .hotspot.about {
@@ -402,10 +402,15 @@ h1 {
 
 .hotspot.settings {
   left: 72%;
-  width: 13%;
+  width: 14%;
 }
-
-.hotspot.profile {
-  left: 85%;
-  width: 15%;
+.contact-hotspot {
+  position: absolute;
+  right: 4%;
+  bottom: 10%;
+  width: 22%;
+  height: 7%;
+  z-index: 20;
+  background: rgba(255, 0, 150, 0.35);
+  border: 1px solid rgba(255,255,255,0.3);
 }
