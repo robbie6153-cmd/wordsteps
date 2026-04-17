@@ -367,11 +367,11 @@ h1 {
 .hotspot {
   position: absolute;
   top: 0;
-  height: 48px;
+  height: 44px;
   background: rgba(255, 0, 150, 0.35);
   border: 1px solid rgba(255,255,255,0.3);
+  display: block;
 }
-
 /* INDIVIDUAL BUTTON POSITIONS */
 
 /* adjust these widths/positions to match icons */
@@ -418,4 +418,5 @@ h1 {
   z-index: 20;
   background: rgba(255, 0, 150, 0.35);
   border: 1px solid rgba(255,255,255,0.3);
+  display: block;
 }
