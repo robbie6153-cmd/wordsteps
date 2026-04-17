@@ -383,14 +383,14 @@ h1 {
 .hotspot.leaderboard {
   top: 0.5%;
   left: 12%;
-  width: 16%;
+  width: 15%;
   height: 7%;
 }
 
 .hotspot.privacy {
   top: 0.5%;
-  left: 28.5%;
-  width: 21%;
+  left: 27.5%;
+  width: 22%;
   height: 7%;
 }
 
@@ -403,21 +403,21 @@ h1 {
 
 .hotspot.about {
   top: 0.5%;
-  left: 69%;
+  left: 68.5%;
   width: 11%;
   height: 7%;
 }
 
 .hotspot.settings {
   top: 0.5%;
-  left: 80%;
+  left: 79.5%;
   width: 10%;
   height: 7%;
 }
 
 .hotspot.profile {
   top: 0.5%;
-  left: 90%;
+  left: 89.5%;
   width: 10%;
   height: 7%;
 }
