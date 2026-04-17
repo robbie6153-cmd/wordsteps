@@ -441,34 +441,31 @@ border: none;
   text-shadow: 0 0 6px rgba(0,0,0,0.7);
   pointer-events: none;
 }
-.contact-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-  color: white;
-  text-shadow: 0 0 6px rgba(0,0,0,0.7);
-  pointer-events: none;
-}
+
 .contact-inner {
   position: absolute;
-  bottom: 8px;
+  bottom: 10px;
   right: 10px;
+
   display: flex;
   align-items: center;
   gap: 6px;
+
+  background: rgba(0,0,0,0.35);
+  padding: 5px 10px;
+  border-radius: 8px;
+
   color: white;
   font-size: 14px;
   font-weight: bold;
   text-shadow: 0 0 6px rgba(0,0,0,0.7);
+
   pointer-events: none;
 }
-
 .contact-icon {
+  position: static; /* THIS IS THE FIX */
   font-size: 16px;
 }
-
 .contact-text {
   font-size: 14px;
 }
