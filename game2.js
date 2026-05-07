@@ -355,13 +355,24 @@ async function submitFinalScore() {
     return;
   }
 
-  if (typeof window.submitRobTechScore !== "function") {
-    alert("Leaderboard system is still loading. Try again in a second.");
-    return;
-  }
-
   await saveWordStepsStats(scoreToSubmit);
-  await window.submitRobTechScore(scoreToSubmit);
+
+  let tries = 0;
+
+  const waitForLeaderboardSubmit = setInterval(async () => {
+    tries++;
+
+    if (typeof window.submitRobTechScore === "function") {
+      clearInterval(waitForLeaderboardSubmit);
+      await window.submitRobTechScore(scoreToSubmit);
+      return;
+    }
+
+    if (tries >= 10) {
+      clearInterval(waitForLeaderboardSubmit);
+      alert("Leaderboard system did not load. Please refresh and try again.");
+    }
+  }, 300);
 }
 
 function waitForAuthThenSubmitPendingScore() {

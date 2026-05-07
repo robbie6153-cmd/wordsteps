@@ -16,6 +16,7 @@ import {
   collection,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
+
 let currentUser = null;
 let currentUsername = null;
 
@@ -40,7 +41,6 @@ onAuthStateChanged(auth, async (user) => {
 
     window.robTechUsername = currentUsername;
 
-    // Show signed-in text
     if (loggedInBox) {
       loggedInBox.textContent = `Signed in as ${currentUsername}`;
     }
@@ -49,7 +49,6 @@ onAuthStateChanged(auth, async (user) => {
       gameLoggedInBox.textContent = `Signed in as ${currentUsername}`;
     }
 
-    // Hide login/create account link
     if (loginBtn) {
       loginBtn.style.display = "none";
     }
@@ -58,7 +57,6 @@ onAuthStateChanged(auth, async (user) => {
     currentUsername = null;
     window.robTechUsername = null;
 
-    // Clear signed-in text
     if (loggedInBox) {
       loggedInBox.textContent = "";
     }
@@ -67,7 +65,6 @@ onAuthStateChanged(auth, async (user) => {
       gameLoggedInBox.textContent = "";
     }
 
-    // Show login/create account link
     if (loginBtn) {
       loginBtn.style.display = "block";
     }
@@ -96,11 +93,13 @@ window.signUp = async function () {
     });
 
     alert("Account created. You are now logged in.");
-  if (localStorage.getItem("pendingLettersInScore")) {
-  window.location.href = "index.html?submitPendingScore=true";
-} else {
-  window.location.href = "index.html";
-}
+
+    if (localStorage.getItem("pendingWordStepsScore")) {
+      window.location.href = "index.html?submitPendingScore=true";
+    } else {
+      window.location.href = "index.html";
+    }
+
   } catch (error) {
     alert(error.message);
   }
@@ -118,12 +117,15 @@ window.logIn = async function () {
 
   try {
     await signInWithEmailAndPassword(auth, email, password);
+
     alert("Logged in.");
-  if (localStorage.getItem("pendingLettersInScore")) {
-  window.location.href = "index.html?submitPendingScore=true";
-} else {
-  window.location.href = "index.html";
-}
+
+    if (localStorage.getItem("pendingWordStepsScore")) {
+      window.location.href = "index.html?submitPendingScore=true";
+    } else {
+      window.location.href = "index.html";
+    }
+
   } catch (error) {
     alert(error.message);
   }
@@ -155,10 +157,11 @@ window.logOut = async function () {
 // 📅 Daily ID
 function getTodayId() {
   const today = new Date();
+
   return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
 }
 
-// 🏆 Submit score (daily leaderboard)
+// 🏆 Submit score — Word Steps daily leaderboard
 window.submitRobTechScore = async function (score) {
   if (!auth.currentUser) {
     alert("You need to create an account or log in to submit your score.");
@@ -169,7 +172,6 @@ window.submitRobTechScore = async function (score) {
   const todayId = getTodayId();
 
   try {
-    // 🔍 Always fetch latest username from Firestore
     const userSnap = await getDoc(doc(db, "users", uid));
 
     let username = "Player";
@@ -178,27 +180,28 @@ window.submitRobTechScore = async function (score) {
       username = userSnap.data().username || "Player";
     }
 
- await addDoc(
-  collection(
-    db,
-    "leaderboards",
-    "letters-in",
-    "days",
-    todayId,
-    "scores"
-  ),
-  {
-    uid: uid,
-    username: username,
-    score: score,
-    game: "letters-in",
-    day: todayId,
-    submittedAt: serverTimestamp()
-  }
-);
+    await addDoc(
+      collection(
+        db,
+        "leaderboards",
+        "word-steps",
+        "days",
+        todayId,
+        "scores"
+      ),
+      {
+        uid: uid,
+        username: username,
+        score: score,
+        game: "word-steps",
+        day: todayId,
+        submittedAt: serverTimestamp()
+      }
+    );
 
     alert("Score submitted to today's leaderboard!");
     window.location.href = "leaderboard.html";
+
   } catch (error) {
     alert(error.message);
   }
