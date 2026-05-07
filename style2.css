@@ -482,3 +482,72 @@ h1 {
   line-height: 1.6;
   color: #333;
 }
+/* ACCOUNT / LOGIN LINKS UNDER PLAY BUTTON */
+.account-links {
+  position: absolute;
+  left: 50%;
+  bottom: 7%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 360px;
+  text-align: center;
+  z-index: 60;
+}
+
+.account-links a {
+  display: block;
+  margin: 10px auto;
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.78);
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.account-links a:hover {
+  background: rgba(46, 204, 113, 0.95);
+  color: black;
+}
+
+#loggedInBox {
+  position: absolute;
+  left: 50%;
+  bottom: 14%;
+  transform: translateX(-50%);
+  width: 85%;
+  text-align: center;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  text-shadow: 0 0 6px black;
+  z-index: 61;
+}
+
+#gameLoggedInBox {
+  margin: 8px auto 12px;
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* MOBILE ACCOUNT LINKS */
+@media (max-width: 600px) {
+  .account-links {
+    bottom: 5%;
+    max-width: 300px;
+  }
+
+  .account-links a {
+    font-size: 14px;
+    padding: 10px 12px;
+    margin: 8px auto;
+  }
+
+  #loggedInBox {
+    bottom: 13%;
+    font-size: 13px;
+  }
+}
